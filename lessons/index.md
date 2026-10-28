@@ -8,7 +8,17 @@
 
 | 教训 | 结论 / 下次怎么做 | 置信度 | 日期 |
 |---|---|---|---|
-| 在 `D:\EX DSH\notebook` 下调用 pwsh 稳定报 `SetNamedSecurityInfoW failed (Win32 5): grantWrite` | 两次独立调用都失败，当环境限制处理；改用 read / glob / write / edit 工具，别在 pwsh 上反复试 | 已证实 | 2026-10-27 |
+| 在 `D:\EX DSH\notebook` 下调用 pwsh 稳定报 `SetNamedSecurityInfoW failed (Win32 5): grantWrite` | 根因是工作区目录缺 `WRITE_OWNER`。用 `diagnose-windows-sandbox-acl` 脚本（`-Path` 工作区、`-AllowRoot` 同路径、`-Out` 放恢复目录）一次修好，之后 pwsh 正常。报告和回滚命令留在 `D:\EX DSH\acl-recovery` | 已解决（2026-10-28 修复） | 2026-10-27 |
 | GitHub 正文抓不到曾让我以为"资料不可读" | 2026-10-27 主人改好网络后已验证：网页版只给导航，`raw.githubusercontent.com` 能拿完整 Markdown。以后先试 raw，别急着标"未评估" | 已过时（坑已填，方法保留） | 2026-10-27 |
 | 文档站抓取只拿到导航就下结论 | `code.claude.com/docs/en/memory` 只有导航；加 `.md` 后缀（`.../memory.md`）能拿全文。以后先试加后缀，再判断"读不到" | 已证实 | 2026-10-27 |
 | 把"没读到"写成"不存在" | 之前把 GitHub 仓库标成"低可信度"，其实只是网络问题。说不确定时说"未读"，别说"没有" | 已证实 | 2026-10-27 |
+| B 站空间页是 SPA，直接抓 HTML 什么都拿不到 | 用动态 API：先取 `nav` 的 wbi 密钥做签名、带 `buvid3/buvid4` cookie；返回 `-352` 是风控，换 cookie 重试即可 | 已证实 | 2026-10-28 |
+| 工作区子目录可能仍缺写权限 | 在 `notebook` 根下新建 `images/` 可以，在已有的 `people/` 下建子目录却被拒。以后先在工作区根建目录，别反复撞子目录 | 已证实 | 2026-10-28 |
+| 下载的图扩展名不可信 | B 站图片常是 WebP，直接存成 `.jpg` 会让读图工具报"格式不符"。下载后按真实格式转换或用 Pillow 重存 | 已证实 | 2026-10-28 |
+| 萌娘百科直抓 403、`action=parse` 被禁 | 改用 `api.php?action=query&prop=extracts&explaintext=1&titles=<条目>`，能拿到正文纯文本；多标题用 `|` 拼会触发 `action-notallowed`，要一条一条查 | 已证实 | 2026-10-28 |
+| 判断图片是否透明，不能只看四角 | 有的图四角是实心白、只有人物周围透明。要算 alpha<10 的像素占比，别用单点判断 | 已证实 | 2026-10-28 |
+| 归档站的热度排序拿不到 | 图鉴的"点选量/下载量"排序是前端禁用的，改 URL 参数没用。想证明"流行"只能靠收录件数、条目描述和跨作者复现 | 已证实 | 2026-10-28 |
+| GitHub 仓库逐个猜文件路径太慢 | 用 `api.github.com/repos/<owner>/<repo>/git/trees/<branch>?recursive=1` 一次拿到全部路径和大小，再挑要的 raw 链接 | 已证实 | 2026-10-28 |
+| Pillow 的 `ImageDraw.floodfill` 对 L 模式不生效 | 想判断透明区是否连通到边缘，得自己写 BFS；floodfill 在灰度图上调了没反应，别浪费时间排查 | 已证实 | 2026-10-28 |
+| 去背景不能只看"背景够白" | 白裙子贴白背景时，洪水填充会从裙摆缝隙渗进去。要先试、再叠洋红看破洞；破得厉害就保留原背景，别硬转 | 已证实 | 2026-10-28 |
+| 工作区里改名/删除主人放进去的文件会被拒 | 新建、覆盖内容可以，重命名和删除会报 Access Denied（沙箱只给写、不给删）。需要一次性提升权限，并在命令里说清楚只动哪些文件 | 已证实 | 2026-10-28 |
