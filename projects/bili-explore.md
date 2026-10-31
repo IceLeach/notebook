@@ -50,4 +50,7 @@
 - 插件是薄壳：它用 `node` 调包内的 `dist/cli.js`；`file:` 安装会把包复制进 profile，源目录可以挪走。
 - 判断"匿名可用"必须在没有 `.auth` 的副本里测（见 [[lessons/index]]）。
 - `npm install` 首次约 10 分钟（要下 ffmpeg 82 MB 与 sherpa 原生库）。
+- **ASR 模型下载源（2026-10-31 实测）**：`scripts/fetch-asr-model.ts` 走的 GitHub release 在本机 `ECONNRESET`，`huggingface.co` 也直连失败；改从镜像取 `https://hf-mirror.com/csukuangfj/sherpa-onnx-paraformer-zh-2023-09-14/resolve/main/` 下的 `tokens.txt` + `model.int8.onnx`（243 MB），放进 `cache/models/sherpa-onnx-paraformer-zh-2023-09-14/` 即可，不用解压 tar.bz2。
+- 匿名 `comments` 实测只回 3 条（total 983）——老接口 `/x/v2/reply` 的限制回潮了，要读更多评论得登录。
+- 12 分钟音频本地转写约 18 秒（CPU）；转出的稿子有人名/书名拼写错误（claud、alliza、velvteen），引用前必须核对。
 - 其余接口细节见 [[projects/bili-video]] 的实测记录与 `docs/design.md`。
