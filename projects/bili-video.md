@@ -1,4 +1,6 @@
-# B 站视频理解（bili-video）
+# B 站视频理解（bili-video）· 已归档
+
+> **2026-10-31 起项目正式命名为 `bili-explore`，当前档案见 [[projects/bili-explore]]。** 本文件保留开发过程记录，不再更新。
 
 > 来源：主人 2026-10-29 会话定调 + 本人实测接口 ｜ 记录于：2026-10-29 ｜ 置信度：方案已定，实现未开始
 > 项目目录：`D:\EX DSH\bili-video` ｜ 方案：`docs/plan-v2.md`（v1 已作废，留档对照）
@@ -47,9 +49,7 @@
 
 ## 下一步
 
-1. **目录改名 `bili-explore`**：磁盘上还是 `bili-video`。改名会让当前会话沙箱根失效，应在重开会话前做（`Rename-Item "D:\EX DSH\bili-video" "bili-explore"`），之后更新 package name、skill 里的路径、插件 link。
-2. 探索第三批（可选）：`home` 推荐流、`hot` 排行、`feed` 的 offset 翻页、合集内容展开、`track` 增量追踪。
-3. 视频侧可选：skill 化判断口径、批量 peek。
+已归档：项目正式化与后续计划见 [[projects/bili-explore]]。
 
 ## 坑与注意
 
